@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thuy Mobile Rating</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #9db5a5 0%, #7a9484 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .rating-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .rating-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .rating-btn {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #7a9484;
+            background: white;
+            border-radius: 50%;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #7a9484;
+        }
+
+        .rating-btn:hover {
+            transform: scale(1.1);
+            background: #7a9484;
+            color: white;
+        }
+
+        .rating-btn.selected {
+            background: #7a9484;
+            color: white;
+            transform: scale(1.15);
+        }
+
+        .rating-btn.special {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .rating-btn.special:hover,
+        .rating-btn.special.selected {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 20px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #7a9484;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: #7a9484;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #6b8474;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(122, 148, 132, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reviews-section {
+            margin-top: 40px;
+        }
+
+        .reviews-header {
+            color: white;
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .reviews-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .review-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #7a9484;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .review-rating {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .review-rating.special {
+            color: #ff6b6b;
+        }
+
+        .review-comment {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .no-reviews {
+            text-align: center;
+            color: #888;
+            padding: 40px;
+            font-style: italic;
+        }
+
+        .star {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 Rate My Driving</h1>
+            <p>How was your experience?</p>
+        </div>
+
+        <div class="rating-card">
+            <h2 style="text-align: center; margin-bottom: 20px; color: #333;">Leave a Review</h2>
+            
+            <div class="rating-options">
+                <button class="rating-btn" data-rating="1">1</button>
+                <button class="rating-btn" data-rating="2">2</button>
+                <button class="rating-btn" data-rating="3">3</button>
+                <button class="rating-btn" data-rating="4">4</button>
+                <button class="rating-btn" data-rating="5">5</button>
+                <button class="rating-btn special" data-rating="67">67</button>
+            </div>
+
+            <textarea id="comment" placeholder="Leave a comment about the ride... (optional)"></textarea>
+
+            <button class="submit-btn" id="submitBtn">Submit Review</button>
+        </div>
+
+        <div class="reviews-section">
+            <h2 class="reviews-header">All Reviews</h2>
+            <div class="reviews-container" id="reviewsContainer">
+                <div class="no-reviews">No reviews yet. Be the first!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedRating = null;
+        let reviews = [];
+        const API_URL = 'http://localhost:3000/api/reviews';
+
+        //load reviews from backend
+        async function loadReviews() {
+            try {
+                const response = await fetch(API_URL);
+                if (response.ok) {
+                    reviews = await response.json();
+                    displayReviews();
+                }
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                displayReviews(); // Show empty state
+            }
+        }
+
+        //save review to backend
+        async function saveReview(review) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(review)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to save review');
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Error saving review:', error);
+                alert('Failed to save review. Make sure the server is running!');
+                throw error;
+            }
+        }
+
+        //load reviews when page loads
+        loadReviews();
+
+        //rating button selection
+        const ratingBtns = document.querySelectorAll('.rating-btn');
+        ratingBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                ratingBtns.forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedRating = btn.dataset.rating;
+            });
+        });
+
+        //submit review
+        document.getElementById('submitBtn').addEventListener('click', async () => {
+            if (!selectedRating) {
+                alert('Please select a rating!');
+                return;
+            }
+
+            const comment = document.getElementById('comment').value.trim();
+            
+            const review = {
+                rating: selectedRating,
+                comment: comment || 'No comment'
+            };
+
+            try {
+                await saveReview(review);
+                await loadReviews();
+            
+                selectedRating = null;
+                document.getElementById('comment').value = '';
+                ratingBtns.forEach(b => b.classList.remove('selected'));
+                
+                document.getElementById('reviewsContainer').scrollTop = 0;
+            } catch (error) {
+                console.error('Error saving review:', error);
+                alert('Failed to save review. Make sure the server is running!');
+                throw error;
+            }
+        });
+
+        function displayReviews() {
+            const container = document.getElementById('reviewsContainer');
+            
+            if (reviews.length === 0) {
+                container.innerHTML = '<div class="no-reviews">No reviews yet. Be the first!</div>';
+                return;
+            }
+
+            container.innerHTML = reviews.map(review => {
+                const isSpecial = review.rating === '67';
+                const ratingClass = isSpecial ? 'special' : '';
+                const stars = isSpecial ? '🔥'.repeat(5) : '⭐'.repeat(Math.min(parseInt(review.rating), 5));
+                
+                return `
+                    <div class="review-item">
+                        <div class="review-rating ${ratingClass}">
+                            ${stars} ${review.rating}/5
+                        </div>
+                        <div class="review-comment">${review.comment}</div>
+                        <div class="review-date">${review.date}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        const reviewsContainer = document.getElementById('reviewsContainer');
+        let isScrolling = false;
+
+        setInterval(() => {
+            if (reviews.length > 3 && !isScrolling) {
+                reviewsContainer.scrollTop += 1;
+                
+                if (reviewsContainer.scrollTop >= reviewsContainer.scrollHeight - reviewsContainer.clientHeight) {
+                    reviewsContainer.scrollTop = 0;
+                }
+            }
+        }, 50);
+
+        reviewsContainer.addEventListener('mouseenter', () => {
+            isScrolling = true;
+        });
+
+        reviewsContainer.addEventListener('mouseleave', () => {
+            isScrolling = false;
+        });
+    </script>
+</body>
+</html>
