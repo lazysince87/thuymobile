@@ -239,7 +239,7 @@
     <script>
         let selectedRating = null;
         let reviews = [];
-        const API_URL = 'http://localhost:3000/api/reviews';
+        const API_URL = 'https://thuymobile.onrender.com/api/reviews';
 
         //load reviews from backend
         async function loadReviews() {
@@ -315,9 +315,7 @@
                 
                 document.getElementById('reviewsContainer').scrollTop = 0;
             } catch (error) {
-                console.error('Error saving review:', error);
-                alert('Failed to save review. Make sure the server is running!');
-                throw error;
+                console.error('Error submitting review:', error);
             }
         });
 
