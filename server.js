@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'reviews.json');
 
 app.use(cors());
@@ -39,11 +39,22 @@ app.post('/api/reviews', (req, res) => {
 
         const data = fs.readFileSync(DATA_FILE, 'utf8');
         const reviews = JSON.parse(data);
+
+        //timezones bro
+        const estDate = new Date().toLocaleString('en-US', {
+            timeZone: 'America/New_York',
+            month: 'numeric',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
         
         const newReview = {
             rating,
             comment: comment || 'No comment',
-            date: new Date().toLocaleString()
+            date: estDate
         };
         
         reviews.unshift(newReview);
